@@ -94,7 +94,7 @@ export class User {
 
   @ApiPropertyOptional({ type: 'string' })
   @Column({ type: 'varchar' })
-  firm_name: string;
+  farm_name: string;
 
   @ApiPropertyOptional({ type: 'string' })
   @Column({ type: 'varchar' })
