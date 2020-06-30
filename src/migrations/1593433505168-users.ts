@@ -47,7 +47,7 @@ export class users1593433505168 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'adress',
+            name: 'address',
             type: 'varchar',
             isNullable: true,
           },
