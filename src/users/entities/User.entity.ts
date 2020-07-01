@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RoleName } from '../../constants/RoleName.enum';
-import { ModerationStatus } from '../../constants/ModerationStatus.enum';
+import { UserModerationStatus } from '../../constants/UserModerationStatus.enum';
 import { PhoneVerification } from '../../auth/entities/Phone-verification.entity';
 
 @Entity({ name: 'users' })
@@ -74,11 +74,11 @@ export class User {
   @Column('enum', { enum: RoleName })
   role: RoleName;
 
-  @ApiProperty({ enum: ModerationStatus })
+  @ApiProperty({ enum: UserModerationStatus })
   @Column('enum', {
-    enum: ModerationStatus,
+    enum: UserModerationStatus,
   })
-  moderation_status: ModerationStatus;
+  moderation_status: UserModerationStatus;
 
   @ApiPropertyOptional({ example: 'Адрес' })
   @Column({

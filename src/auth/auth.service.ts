@@ -17,7 +17,7 @@ import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
 import { RegistrationBodyDto } from './dto/registration-body.dto';
 import { AccessToken } from '../common/interfaces/access-token.interface';
-import { ModerationStatus } from '../constants/ModerationStatus.enum';
+import { UserModerationStatus } from '../constants/UserModerationStatus.enum';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/User.entity';
 import { IJwtPayload } from './interfaces/JwtPayload.interface';
@@ -162,7 +162,7 @@ export class AuthService {
     const user = this.userRepository.create(body);
     this.isUserNotUnique(phoneVerification.phone, body.email);
     user.phone = phoneVerification.phone;
-    user.moderation_status = ModerationStatus.NOT_MODERATED;
+    user.moderation_status = UserModerationStatus.NOT_MODERATED;
     await this.userRepository.save(user);
     phoneVerification.user_id = user.id;
     phoneVerification.used = true;
