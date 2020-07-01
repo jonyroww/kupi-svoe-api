@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class phoneVerificationsUserIdDropNotNull1593526376395
+export class PhoneVerificationsUserIdDropNotNull1593526376395
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

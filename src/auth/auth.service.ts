@@ -4,7 +4,6 @@ import { PhoneVerificationRequestDto } from './dto/create-phone-verification.dto
 import { PurposeType } from '../constants/PurposeType.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PhoneVerification } from './entities/Phone-verification.entity';
-import { PhoneVerificationKey } from './interfaces/phone-verification-key.interface';
 import { UserRepository } from '../users/repositories/User.repository';
 import cryptoRandomString from 'crypto-random-string';
 import { makeError } from 'src/common/errors';
@@ -13,8 +12,9 @@ import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { SMSRu } from 'node-sms-ru';
 import bcrypt from 'bcrypt';
 import { VerificationPhoneDto } from './dto/verification-phone.dto';
-import { ParamsValidationDto } from 'src/common/dto/params-validation.dto';
+import { IdParamDto } from 'src/common/dto/id-param.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
+import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +29,7 @@ export class AuthService {
   @Transactional()
   async createPhoneVerification(
     body: PhoneVerificationRequestDto,
-  ): Promise<PhoneVerificationKey> {
+  ): Promise<PhoneVerificationKeyDto> {
     const user = await this.userRepository.findOne({
       phone: body.phone,
     });
@@ -65,10 +65,10 @@ export class AuthService {
   @Transactional()
   async verificationPhone(
     body: VerificationPhoneDto,
-    params: ParamsValidationDto,
+    params: IdParamDto,
   ): Promise<PhoneVerification> {
     const phoneVerification = await this.phoneVerificationRepository.findOne(
-      params.Id,
+      params.id,
     );
 
     if (!phoneVerification) {
@@ -98,10 +98,10 @@ export class AuthService {
   @Transactional()
   async verificationPhoneResend(
     body: VerificationResendDto,
-    params: ParamsValidationDto,
+    params: IdParamDto,
   ): Promise<PhoneVerification> {
     const phoneVerification = await this.phoneVerificationRepository.findOne(
-      params.Id,
+      params.id,
     );
 
     if (!phoneVerification) {
