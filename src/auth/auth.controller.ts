@@ -23,6 +23,8 @@ import { IdParamDto } from '../common/dto/id-param.dto';
 import { VerificationPhoneDto } from './dto/verification-phone.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
+import { AccessToken } from '../common/interfaces/access-token.interface';
+import { RegistrationBodyDto } from './dto/registration-body.dto';
 
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 @UseInterceptors(ClassSerializerInterceptor)
@@ -57,5 +59,12 @@ export class AuthController {
     @Param() params: IdParamDto,
   ): Promise<PhoneVerification> {
     return this.authService.verificationPhoneResend(body, params);
+  }
+
+  @Post('/registration')
+  @ApiTags('Auth')
+  @ApiCreatedResponse({ type: () => PhoneVerification })
+  registrationUser(@Body() body: RegistrationBodyDto): Promise<AccessToken> {
+    return this.authService.registrationUser(body);
   }
 }

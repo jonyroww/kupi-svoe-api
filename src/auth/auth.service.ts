@@ -15,6 +15,10 @@ import { VerificationPhoneDto } from './dto/verification-phone.dto';
 import { IdParamDto } from 'src/common/dto/id-param.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
+import { RegistrationBodyDto } from './dto/registration-body.dto';
+import { AccessToken } from 'src/common/interfaces/access-token.interface';
+import { ModerationStatus } from 'src/constants/ModerationStatus.enum';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +28,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private configService: ConfigService,
     private readonly smsRu: SMSRu,
+    private jwtService: JwtService,
   ) {}
 
   @Transactional()
@@ -136,6 +141,34 @@ export class AuthService {
     return phoneVerification;
   }
 
+  async registrationUser({
+    verification_id,
+    verification_key,
+    ...body
+  }: RegistrationBodyDto): Promise<AccessToken> {
+    const phoneVerification = await this.phoneVerificationRepository.findOne(
+      verification_id,
+    );
+    this.checkPhoneVerification(
+      phoneVerification,
+      verification_id,
+      verification_key,
+      PurposeType.REGISTRATION,
+    );
+
+    body.password = await this.hashPassword(body.password);
+    const user = this.userRepository.create(body);
+    this.isUserNotUnique(phoneVerification.phone, body.email);
+    user.phone = phoneVerification.phone;
+    user.moderation_status = ModerationStatus.NOT_MODERATED;
+    await this.userRepository.save(user);
+    phoneVerification.user_id = user.id;
+    phoneVerification.used = true;
+    await this.phoneVerificationRepository.save(phoneVerification);
+
+    return { token: await this.getToken(user.id) };
+  }
+
   checkPhoneVerification(
     phoneVerification,
     verification_id,
@@ -160,6 +193,29 @@ export class AuthService {
   async hashPassword(password): Promise<string> {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
+  }
+
+  async getToken(userId: number) {
+    return await this.jwtService.signAsync({
+      sub: userId,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+    });
+  }
+
+  async validateUser(phone: string, password: string) {
+    const user = await this.userRepository.findOne({
+      phone: phone,
+    });
+    if (user) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        return user;
+      } else {
+        throw makeError('WRONG_PASSWORD');
+      }
+    } else {
+      throw makeError('USER_NOT_FOUND');
+    }
   }
 
   async isUserNotUnique(phone: string, email: string) {
