@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { SMSRuModule } from 'node-sms-ru/nestjs';
 import { ConfigService } from '../config/config.service';
 import { ConfigModule } from '../config/config.module';

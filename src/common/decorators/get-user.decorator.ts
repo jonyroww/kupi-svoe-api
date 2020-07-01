@@ -8,7 +8,6 @@ export const GetUser = createParamDecorator(
     if (path) {
       return _.get(req.user, path, undefined);
     }
-
     return req.user as User;
   },
 );

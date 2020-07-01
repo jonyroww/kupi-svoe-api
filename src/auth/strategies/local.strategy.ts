@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
+import { TransformPhone } from '../../common/utils/transform-phone.util';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -13,8 +14,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(phone: string, password: string) {
-    const user = await this.authService.validateUser(phone, password);
-
+    const user = await this.authService.validateUser(
+      TransformPhone(phone),
+      password,
+    );
     return user;
   }
 }

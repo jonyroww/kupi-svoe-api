@@ -6,19 +6,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PhoneVerification } from './entities/Phone-verification.entity';
 import { UserRepository } from '../users/repositories/User.repository';
 import cryptoRandomString from 'crypto-random-string';
-import { makeError } from 'src/common/errors';
-import { ConfigService } from 'src/config/config.service';
+import { makeError } from '../common/errors';
+import { ConfigService } from '../config/config.service';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { SMSRu } from 'node-sms-ru';
 import bcrypt from 'bcrypt';
 import { VerificationPhoneDto } from './dto/verification-phone.dto';
-import { IdParamDto } from 'src/common/dto/id-param.dto';
+import { IdParamDto } from '../common/dto/id-param.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
 import { RegistrationBodyDto } from './dto/registration-body.dto';
-import { AccessToken } from 'src/common/interfaces/access-token.interface';
-import { ModerationStatus } from 'src/constants/ModerationStatus.enum';
+import { AccessToken } from '../common/interfaces/access-token.interface';
+import { ModerationStatus } from '../constants/ModerationStatus.enum';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/User.entity';
+import { IJwtPayload } from './interfaces/JwtPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -167,6 +169,17 @@ export class AuthService {
     await this.phoneVerificationRepository.save(phoneVerification);
 
     return { token: await this.getToken(user.id) };
+  }
+
+  async userLogin(user: User): Promise<AccessToken> {
+    const payload: IJwtPayload = {
+      sub: user.id,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+    };
+
+    return {
+      token: await this.jwtService.signAsync(payload),
+    };
   }
 
   checkPhoneVerification(
