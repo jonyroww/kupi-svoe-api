@@ -12,7 +12,6 @@ import {
   Get,
   Query,
   Res,
-  ExecutionContext,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PhoneVerificationRequestDto } from './dto/create-phone-verification.dto';
