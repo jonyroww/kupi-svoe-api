@@ -7,6 +7,7 @@ import { ConfigModule } from '../config/config.module';
 import path from 'path';
 import appRootPath from 'app-root-path';
 import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
+import { PhotosModule } from '../photos/photos.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
     TypeOrmModule.forRoot(),
     AuthModule,
     ConfigModule,
+    PhotosModule,
   ],
   controllers: [],
   providers: [],
