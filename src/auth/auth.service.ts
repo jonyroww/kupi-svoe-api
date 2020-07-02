@@ -6,15 +6,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PhoneVerification } from './entities/Phone-verification.entity';
 import { UserRepository } from '../users/repositories/User.repository';
 import cryptoRandomString from 'crypto-random-string';
-import { makeError } from 'src/common/errors';
-import { ConfigService } from 'src/config/config.service';
+import { makeError } from '../common/errors';
+import { ConfigService } from '../config/config.service';
 import { Transactional } from 'typeorm-transactional-cls-hooked';
 import { SMSRu } from 'node-sms-ru';
 import bcrypt from 'bcrypt';
 import { VerificationPhoneDto } from './dto/verification-phone.dto';
-import { IdParamDto } from 'src/common/dto/id-param.dto';
+import { IdParamDto } from '../common/dto/id-param.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
+import { RegistrationBodyDto } from './dto/registration-body.dto';
+import { AccessToken } from '../common/interfaces/access-token.interface';
+import { UserModerationStatus } from '../constants/UserModerationStatus.enum';
+import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/User.entity';
+import { IJwtPayload } from './interfaces/JwtPayload.interface';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +30,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private configService: ConfigService,
     private readonly smsRu: SMSRu,
+    private jwtService: JwtService,
   ) {}
 
   @Transactional()
@@ -136,6 +143,45 @@ export class AuthService {
     return phoneVerification;
   }
 
+  async registrationUser({
+    verification_id,
+    verification_key,
+    ...body
+  }: RegistrationBodyDto): Promise<AccessToken> {
+    const phoneVerification = await this.phoneVerificationRepository.findOne(
+      verification_id,
+    );
+    this.checkPhoneVerification(
+      phoneVerification,
+      verification_id,
+      verification_key,
+      PurposeType.REGISTRATION,
+    );
+
+    body.password = await this.hashPassword(body.password);
+    const user = this.userRepository.create(body);
+    this.isUserNotUnique(phoneVerification.phone, body.email);
+    user.phone = phoneVerification.phone;
+    user.moderation_status = UserModerationStatus.NOT_MODERATED;
+    await this.userRepository.save(user);
+    phoneVerification.user_id = user.id;
+    phoneVerification.used = true;
+    await this.phoneVerificationRepository.save(phoneVerification);
+
+    return { token: await this.getToken(user.id) };
+  }
+
+  async userLogin(user: User): Promise<AccessToken> {
+    const payload: IJwtPayload = {
+      sub: user.id,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+    };
+
+    return {
+      token: await this.jwtService.signAsync(payload),
+    };
+  }
+
   checkPhoneVerification(
     phoneVerification,
     verification_id,
@@ -160,6 +206,29 @@ export class AuthService {
   async hashPassword(password): Promise<string> {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
+  }
+
+  async getToken(userId: number) {
+    return await this.jwtService.signAsync({
+      sub: userId,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7,
+    });
+  }
+
+  async validateUser(phone: string, password: string) {
+    const user = await this.userRepository.findOne({
+      phone: phone,
+    });
+    if (user) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        return user;
+      } else {
+        throw makeError('WRONG_PASSWORD');
+      }
+    } else {
+      throw makeError('USER_NOT_FOUND');
+    }
   }
 
   async isUserNotUnique(phone: string, email: string) {

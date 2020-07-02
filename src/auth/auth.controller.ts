@@ -8,6 +8,8 @@ import {
   Body,
   Param,
   Put,
+  UseGuards,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PhoneVerificationRequestDto } from './dto/create-phone-verification.dto';
@@ -18,11 +20,17 @@ import {
   ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { PhoneVerification } from './entities/Phone-verification.entity';
 import { IdParamDto } from '../common/dto/id-param.dto';
 import { VerificationPhoneDto } from './dto/verification-phone.dto';
 import { VerificationResendDto } from './dto/verification-phone-resend.dto';
 import { PhoneVerificationKeyDto } from './dto/phone-verification-key.dto';
+import { AccessToken } from '../common/interfaces/access-token.interface';
+import { RegistrationBodyDto } from './dto/registration-body.dto';
+import { GetUser } from '../common/decorators/get-user.decorator';
+import { User } from '../users/entities/User.entity';
+import { UserLoginDto } from './dto/user-login.dto';
 
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 @UseInterceptors(ClassSerializerInterceptor)
@@ -57,5 +65,30 @@ export class AuthController {
     @Param() params: IdParamDto,
   ): Promise<PhoneVerification> {
     return this.authService.verificationPhoneResend(body, params);
+  }
+
+  @Post('/registration')
+  @ApiTags('Auth')
+  @ApiCreatedResponse({ type: () => PhoneVerification })
+  registrationUser(@Body() body: RegistrationBodyDto): Promise<AccessToken> {
+    return this.authService.registrationUser(body);
+  }
+
+  @Post('/login')
+  @ApiTags('Auth')
+  @ApiOkResponse()
+  @ApiBody({ type: () => UserLoginDto })
+  @UseGuards(AuthGuard('local'))
+  async userLogin(@GetUser() user: User) {
+    return await this.authService.userLogin(user);
+  }
+
+  @Get('/me')
+  @ApiTags('Auth')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: () => User })
+  async me(@GetUser() user: User) {
+    return user;
   }
 }
