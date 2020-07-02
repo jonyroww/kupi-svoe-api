@@ -100,6 +100,10 @@ export class User {
   @Column({ type: 'varchar' })
   legal_entity_name: string;
 
+  @ApiPropertyOptional({ type: 'boolean' })
+  @Column({ type: 'boolean' })
+  email_confirmed: boolean;
+
   @OneToOne(
     () => PhoneVerification,
     (registration: PhoneVerification) => registration.user,

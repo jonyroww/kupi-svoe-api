@@ -22,6 +22,7 @@ export const errors = {
   EMAIL_ALREADY_EXISTS: HttpStatus.BAD_REQUEST,
   USER_IS_REJECTED: HttpStatus.FORBIDDEN,
   USER_MUST_BE_APPROVED: HttpStatus.FORBIDDEN,
+  EMAIL_ALREADY_CONFIRMED: HttpStatus.BAD_REQUEST,
 };
 
 export type ErrorCode = keyof typeof errors;

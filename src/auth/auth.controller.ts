@@ -10,6 +10,9 @@ import {
   Put,
   UseGuards,
   Get,
+  Query,
+  Res,
+  ExecutionContext,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PhoneVerificationRequestDto } from './dto/create-phone-verification.dto';
@@ -31,12 +34,18 @@ import { RegistrationBodyDto } from './dto/registration-body.dto';
 import { GetUser } from '../common/decorators/get-user.decorator';
 import { User } from '../users/entities/User.entity';
 import { UserLoginDto } from './dto/user-login.dto';
+import { ConfigService } from '../config/config.service';
+import { EmailTokenDto } from './dto/email-confirm-query.dto';
+import { Response } from 'express';
 
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService,
+  ) {}
 
   @Post('/phone-verifications')
   @ApiTags('Phone verification')
@@ -90,5 +99,28 @@ export class AuthController {
   @ApiOkResponse({ type: () => User })
   async me(@GetUser() user: User) {
     return user;
+  }
+
+  @Post('/email-verification')
+  @ApiTags('Auth')
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  @ApiCreatedResponse()
+  emailVerification(@GetUser() user: User) {
+    return this.authService.emailVerificationSend(user);
+  }
+
+  @Get('/email-confirm')
+  @ApiTags('Auth')
+  @ApiCreatedResponse()
+  async emailConfirm(@Query() query: EmailTokenDto, @Res() res: Response) {
+    const jwtSign = await this.authService.emailConfirm(query);
+    if (jwtSign) {
+      try {
+        res.redirect(this.configService.get('REDIRECT_URI_SUCCESS'));
+      } catch (err) {
+        res.redirect(this.configService.get('REDIRECT_URI_ERROR'));
+      }
+    }
   }
 }
