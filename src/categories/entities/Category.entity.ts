@@ -9,6 +9,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Product } from '../../products/entities/Product.entity';
 
 @Entity({
   name: 'categories',
@@ -53,4 +54,11 @@ export class Category {
   )
   @ApiProperty({ type: () => Category, isArray: true })
   children: Category[];
+
+  @ApiProperty()
+  @OneToMany(
+    () => Product,
+    (product: Product) => product.category,
+  )
+  product: Product[];
 }

@@ -7,11 +7,13 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RoleName } from '../../constants/RoleName.enum';
 import { UserModerationStatus } from '../../constants/UserModerationStatus.enum';
 import { PhoneVerification } from '../../auth/entities/Phone-verification.entity';
+import { Product } from '../../products/entities/Product.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -109,4 +111,11 @@ export class User {
     (registration: PhoneVerification) => registration.user,
   )
   registration: PhoneVerification;
+
+  @ApiProperty()
+  @OneToMany(
+    () => Product,
+    (product: Product) => product.user,
+  )
+  product: Product[];
 }
