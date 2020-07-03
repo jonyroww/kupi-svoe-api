@@ -1,21 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { initializeTransactionalContext } from 'typeorm-transactional-cls-hooked';
+import { Logger } from '@nestjs/common';
+import { ConfigService } from './config/config.service';
+import { setupSwagger } from './lib/setup-swagger';
+
+const logger = new Logger('bootstrap');
 
 async function bootstrap() {
   initializeTransactionalContext();
-  const app = await NestFactory.create(AppModule);
-  app.enableCors();
-  const options = new DocumentBuilder()
-    .setTitle('Kupi svoe')
-    .setDescription('The Kupi svoe API description')
-    .setVersion('1.0')
-    .setBasePath(process.env.BASE_URL)
-    .build();
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT, process.env.HOST);
+  const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+
+  app.enableCors();
+
+  setupSwagger(app);
+
+  const PORT = configService.get('PORT');
+  const HOST = configService.get('HOST');
+
+  await app.listen(PORT, HOST);
+  logger.log(`Server listening on http://${HOST}:${PORT}`);
 }
-bootstrap();
+
+bootstrap().catch(err => {
+  console.error(err);
+  Logger.error(err);
+  process.exit(1);
+});

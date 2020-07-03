@@ -8,6 +8,7 @@ import path from 'path';
 import appRootPath from 'app-root-path';
 import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { PhotosModule } from '../photos/photos.module';
+import { CategoriesModule } from '../categories/categories.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { PhotosModule } from '../photos/photos.module';
       inject: [ConfigService],
     }),
     TypeOrmModule.forRoot(),
+    CategoriesModule,
     AuthModule,
     ConfigModule,
     PhotosModule,
