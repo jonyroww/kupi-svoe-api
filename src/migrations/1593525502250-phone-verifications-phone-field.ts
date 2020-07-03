@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/class-name-casing */
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export class PhoneVerificationsPhoneField1593525502250
+export class phoneVerificationsPhoneField1593525502250
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumns('phone_verifications', [
