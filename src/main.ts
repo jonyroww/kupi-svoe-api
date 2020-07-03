@@ -11,7 +11,7 @@ async function bootstrap() {
     .setTitle('Kupi svoe')
     .setDescription('The Kupi svoe API description')
     .setVersion('1.0')
-    .setBasePath(process.env.BASE_URL)
+    .addServer(process.env.BASE_URL, 'default server')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
