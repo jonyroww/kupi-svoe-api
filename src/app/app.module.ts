@@ -9,6 +9,7 @@ import appRootPath from 'app-root-path';
 import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { PhotosModule } from '../photos/photos.module';
 import { CategoriesModule } from '../categories/categories.module';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CategoriesModule } from '../categories/categories.module';
     AuthModule,
     ConfigModule,
     PhotosModule,
+    ProductsModule,
   ],
   controllers: [],
   providers: [],

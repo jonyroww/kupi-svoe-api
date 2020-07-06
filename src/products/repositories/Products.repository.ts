@@ -3,4 +3,4 @@ import { EntityRepository } from 'typeorm';
 import { CommonBaseRepository } from '../../common/classes/common-repository.class';
 
 @EntityRepository(Product)
-export class CategoriesRepository extends CommonBaseRepository<Product> {}
+export class ProductRepository extends CommonBaseRepository<Product> {}
