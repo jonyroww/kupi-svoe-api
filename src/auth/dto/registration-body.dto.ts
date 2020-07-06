@@ -1,17 +1,13 @@
 import {
   IsOptional,
-  IsArray,
   IsNumber,
   IsString,
   IsAlphanumeric,
-  IsDate,
   IsEmail,
-  IsBoolean,
   IsEnum,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { TransformIntArray } from '../../common/utils/transform-array-int.util';
 import { TransformInt } from '../../common/utils/transform-int.util';
 import { RoleName } from '../../constants/RoleName.enum';
 

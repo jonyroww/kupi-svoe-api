@@ -63,7 +63,7 @@ export class Products1593778950300 implements MigrationInterface {
           },
           {
             name: 'price',
-            type: 'float',
+            type: 'numeric',
             isNullable: false,
           },
           {
