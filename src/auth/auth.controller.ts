@@ -87,7 +87,7 @@ export class AuthController {
   @ApiOkResponse()
   @ApiBody({ type: () => UserLoginDto })
   @UseGuards(AuthGuard('local'))
-  async userLogin(@GetUser() user: User) {
+  async userLogin(@GetUser() user: User): Promise<AccessToken> {
     return await this.authService.userLogin(user);
   }
 
@@ -96,7 +96,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @ApiOkResponse({ type: () => User })
-  async me(@GetUser() user: User) {
+  async me(@GetUser() user: User): Promise<User> {
     return user;
   }
 
