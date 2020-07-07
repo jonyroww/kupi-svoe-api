@@ -76,7 +76,11 @@ export class Product {
   })
   storage_period: string;
 
-  @ApiPropertyOptional({ type: 'Date' })
+  /**
+   * Дата сборки урожая
+   *
+   */
+  @ApiPropertyOptional({ type: 'Date', description: 'Дата сборки урожая' })
   @Column({ type: 'date' })
   collection_date: Date;
 
