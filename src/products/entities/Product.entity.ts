@@ -1,4 +1,13 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../users/entities/User.entity';
 import { Category } from '../../categories/entities/Category.entity';
@@ -18,18 +27,18 @@ export class Product {
     example: '2019-11-22T16:03:05Z',
     nullable: false,
   })
-  @Column({
+  @CreateDateColumn({
     nullable: false,
     type: 'timestamp with time zone',
   })
   created_at: Date;
 
   @ApiPropertyOptional({ type: 'string', example: '2019-11-22T16:03:05Z' })
-  @Column({ type: 'timestamp with time zone', nullable: false })
+  @UpdateDateColumn({ type: 'timestamp with time zone', nullable: false })
   updated_at: Date;
 
   @ApiPropertyOptional({ type: 'string', example: '2019-11-22T16:03:05Z' })
-  @Column({ type: 'timestamp with time zone' })
+  @DeleteDateColumn({ type: 'timestamp with time zone' })
   deleted_at: Date;
 
   @ApiProperty()
@@ -83,7 +92,7 @@ export class Product {
   @Column({ type: 'text' })
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => User })
   @ManyToOne(
     () => User,
     (user: User) => user.product,

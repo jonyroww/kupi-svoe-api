@@ -106,13 +106,14 @@ export class User {
   @Column({ type: 'boolean' })
   email_confirmed: boolean;
 
+  @ApiProperty({ type: () => PhoneVerification })
   @OneToOne(
     () => PhoneVerification,
     (registration: PhoneVerification) => registration.user,
   )
   registration: PhoneVerification;
 
-  @ApiProperty()
+  @ApiProperty({ type: () => Product })
   @OneToMany(
     () => Product,
     (product: Product) => product.user,

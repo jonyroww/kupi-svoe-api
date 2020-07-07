@@ -6,6 +6,9 @@ import { Product } from './entities/Product.entity';
 import { GetAllQueryDto } from './dto/get-all.dto';
 import { Order } from '../constants/Order.enum';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { IdParamDto } from '../common/dto/id-param.dto';
+import { makeError } from '../common/errors';
 
 @Injectable()
 export class ProductsService {
@@ -54,5 +57,37 @@ export class ProductsService {
       .offset(query.offset)
       .getManyAndCount();
     return { total: total, data: data };
+  }
+
+  async getOneProduct(params: IdParamDto) {
+    const product = await this.productRepository.findOne(params.id);
+    if (!product) {
+      throw makeError('NOT_FOUND');
+    }
+    return product;
+  }
+
+  async updateProduct(
+    body: UpdateProductDto,
+    user: User,
+    params: IdParamDto,
+  ): Promise<Product> {
+    const product = await this.productRepository.findOneOrFailHttp(params.id);
+    if (product.user_id != user.id) {
+      throw makeError('FORBIDDEN');
+    }
+    const mergeProduct = this.productRepository.merge(product, body);
+    await this.productRepository.save(mergeProduct);
+    return mergeProduct;
+  }
+
+  async deleteProduct(params: IdParamDto) {
+    const product = await this.productRepository.findOne(params.id);
+    if (product) {
+      await this.productRepository.softDelete({ id: params.id });
+      return;
+    } else {
+      throw makeError('NOT_FOUND');
+    }
   }
 }
