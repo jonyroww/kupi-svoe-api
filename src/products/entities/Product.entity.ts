@@ -80,11 +80,11 @@ export class Product {
    * Дата сборки урожая
    *
    */
-  @ApiPropertyOptional({ type: 'Date', description: 'Дата сборки урожая' })
+  @ApiPropertyOptional({ type: 'string', description: 'Дата сборки урожая' })
   @Column({ type: 'date' })
   collection_date: Date;
 
-  @ApiProperty({ type: 'int' })
+  @ApiProperty({ type: 'number' })
   @Column({ type: 'int' })
   user_id: number;
 

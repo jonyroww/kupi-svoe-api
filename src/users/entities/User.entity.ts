@@ -113,7 +113,7 @@ export class User {
   )
   registration: PhoneVerification;
 
-  @ApiProperty({ type: () => Product })
+  @ApiProperty({ type: () => Product, isArray: true })
   @OneToMany(
     () => Product,
     (product: Product) => product.user,

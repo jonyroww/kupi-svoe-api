@@ -76,9 +76,9 @@ export class ProductsService {
     if (product.user_id != user.id) {
       throw makeError('FORBIDDEN');
     }
-    const mergeProduct = this.productRepository.merge(product, body);
-    await this.productRepository.save(mergeProduct);
-    return mergeProduct;
+    this.productRepository.merge(product, body);
+    await this.productRepository.save(product);
+    return product;
   }
 
   async deleteProduct(params: IdParamDto) {

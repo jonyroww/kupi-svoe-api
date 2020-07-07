@@ -8,6 +8,10 @@ import {
   Put,
   Param,
   Delete,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
@@ -27,6 +31,8 @@ import { IdParamDto } from '../common/dto/id-param.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { IsAdminGuard } from '../common/guards/is-admin.guard';
 
+@UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
