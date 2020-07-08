@@ -12,19 +12,23 @@ import { User } from '../../users/entities/User.entity';
 
 @Entity({ name: 'basket_items' })
 export class BasketItem {
-  @PrimaryGeneratedColumn()
   @ApiProperty()
+  @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({ type: 'string', format: 'datetime' })
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
+  @ApiProperty()
   @Column({ type: 'integer', nullable: false })
   user_id: number;
 
+  @ApiProperty()
   @Column({ type: 'integer', nullable: false })
   product_id: number;
 
+  @ApiProperty({ type: () => Product })
   @ApiPropertyOptional({ type: () => Product })
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })

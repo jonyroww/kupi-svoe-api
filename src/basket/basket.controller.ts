@@ -14,7 +14,12 @@ import {
 import { CreateBasketItemDto } from './dto/CreateBasketItem.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { MatchUserIdParamGuard } from '../common/guards/match-user-id-param.guard';
-import { ApiTags, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 import { UserPathDto } from '../users/dto/UserPath.dto';
 import { BasketService } from './basket.service';
 import { BasketItem } from './entities/BasketItem.entity';
@@ -34,6 +39,13 @@ export class BasketController {
   constructor(private readonly basketService: BasketService) {}
 
   @Get('users/:userId/basket-items')
+  @ApiOperation({
+    description: `Возвращает список объектов, у которых в полях product
+      есть объект продукта. Этот метод может быть полезен когда нужно
+      получить не только продукты в корзине, но и дату добавления в корзину.
+      Отличие от users/:userId/products-in-basket в том, что он возвращает
+      список непосредственно объектов продуктов.`,
+  })
   @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
   @ApiOkResponse({ type: () => BasketItem, isArray: true })
   getBasketItems(@Param() { userId }: UserPathDto): Promise<BasketItem[]> {
