@@ -25,6 +25,7 @@ export const errors = {
   EMAIL_ALREADY_CONFIRMED: HttpStatus.BAD_REQUEST,
   CATEGORY_NOT_FOUND: HttpStatus.NOT_FOUND,
   NOT_FOUND: HttpStatus.NOT_FOUND,
+  PRODUCT_NOT_FOUND: HttpStatus.NOT_FOUND,
 };
 
 export type ErrorCode = keyof typeof errors;
