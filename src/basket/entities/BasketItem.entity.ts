@@ -28,7 +28,6 @@ export class BasketItem {
   @Column({ type: 'integer', nullable: false })
   product_id: number;
 
-  @ApiProperty({ type: () => Product })
   @ApiPropertyOptional({ type: () => Product })
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
