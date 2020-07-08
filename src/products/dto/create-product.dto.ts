@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsDate, IsISO8601 } from 'class-validator';
+import { IsNumber, IsString, IsDate } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { TransformInt } from '../../common/utils/transform-int.util';
@@ -26,7 +26,6 @@ export class CreateProductDto {
   storage_period: string;
 
   @ApiPropertyOptional({ type: 'string' })
-  @IsISO8601()
   @Type(() => Date)
   @IsDate()
   collection_date: Date;
