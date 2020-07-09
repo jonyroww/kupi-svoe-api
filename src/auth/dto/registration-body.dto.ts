@@ -49,7 +49,7 @@ export class RegistrationBodyDto {
   password: string;
 
   @ApiProperty({ enum: RoleName })
-  @IsEnum(RoleName)
+  @IsEnum(['SELLER', 'CUSTOMER', 'DRIVER'])
   role: RoleName;
 
   @ApiPropertyOptional({ type: 'string' })
