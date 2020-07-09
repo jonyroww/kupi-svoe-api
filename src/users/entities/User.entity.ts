@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RoleName } from '../../constants/RoleName.enum';
@@ -119,4 +121,13 @@ export class User {
     (product: Product) => product.user,
   )
   product: Product[];
+
+  @ApiPropertyOptional({ type: () => Product })
+  @ManyToMany(() => Product)
+  @JoinTable({
+    name: 'basket_items',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'product_id', referencedColumnName: 'id' },
+  })
+  productsInBasket: Product[];
 }
