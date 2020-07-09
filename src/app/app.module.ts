@@ -10,6 +10,7 @@ import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { PhotosModule } from '../photos/photos.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { ProductsModule } from '../products/products.module';
+import { BasketModule } from '../basket';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ProductsModule } from '../products/products.module';
       }),
       inject: [ConfigService],
     }),
+    BasketModule,
     TypeOrmModule.forRoot(),
     CategoriesModule,
     AuthModule,

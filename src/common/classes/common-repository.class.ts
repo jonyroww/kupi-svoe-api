@@ -3,9 +3,11 @@ import { makeError, ErrorCode } from '../errors';
 import { Type } from '@nestjs/common';
 import { BaseRepository } from 'typeorm-transactional-cls-hooked';
 import { Category } from '../../categories/entities/Category.entity';
+import { Product } from '../../products/entities/Product.entity';
 
 const entitiesMappedToErrorCodes = new Map<Type<any>, ErrorCode>([
   [Category, 'CATEGORY_NOT_FOUND'],
+  [Product, 'PRODUCT_NOT_FOUND'],
 ]);
 
 export class CommonBaseRepository<Entity> extends BaseRepository<Entity> {

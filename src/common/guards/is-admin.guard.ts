@@ -1,9 +1,10 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { RoleName } from '../../constants/RoleName.enum';
 import { User } from '../../users/entities/User.entity';
 import { makeError } from '../errors/index';
 
+@Injectable()
 export class IsAdminGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const http = context.switchToHttp();
