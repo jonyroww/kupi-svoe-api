@@ -4,11 +4,14 @@ import { initializeTransactionalContext } from 'typeorm-transactional-cls-hooked
 import { Logger } from '@nestjs/common';
 import { ConfigService } from './config/config.service';
 import { setupSwagger } from './lib/setup-swagger';
+import { runMigrations } from './lib/run-migrations';
 
 const logger = new Logger('bootstrap');
 
 async function bootstrap() {
   initializeTransactionalContext();
+
+  await runMigrations();
 
   const app = await NestFactory.create(AppModule);
 
