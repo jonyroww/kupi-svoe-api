@@ -11,6 +11,7 @@ import { PhotosModule } from '../photos/photos.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { ProductsModule } from '../products/products.module';
 import { BasketModule } from '../basket';
+import { OrdersModule } from '../orders/orders.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { BasketModule } from '../basket';
     ConfigModule,
     PhotosModule,
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],
