@@ -77,7 +77,7 @@ export class Order {
   payment_type: string;
 
   @ApiProperty({ type: () => Product })
-  @ManyToMany(() => Product, { eager: true })
+  @ManyToMany(() => Product, { eager: true, cascade: true })
   @JoinTable({
     name: 'orders_products',
     joinColumn: { name: 'order_id', referencedColumnName: 'id' },

@@ -7,10 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToMany,
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../users/entities/User.entity';
 import { Category } from '../../categories/entities/Category.entity';
+import { Order } from '../../orders/entities/Order.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -111,4 +113,11 @@ export class Product {
   @JoinColumn({ name: 'category_id' })
   @ApiProperty({ type: () => Category })
   category: Category;
+
+  @ApiProperty({ type: () => Order })
+  @ManyToMany(
+    () => Order,
+    order => order.products,
+  )
+  orders: Product[];
 }

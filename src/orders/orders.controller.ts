@@ -26,7 +26,6 @@ import { Order } from './entities/Order.entity';
 import { UserPathDto } from '../users/dto/UserPath.dto';
 import { MatchUserIdParamGuard } from '../common/guards/match-user-id-param.guard';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
-import { query } from 'express';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
 
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -42,10 +41,10 @@ export class OrdersController {
   @Post('users/:userId/orders')
   createProduct(
     @Body() body: CreateOrderDto,
-    @GetUser() user: User,
+    @GetUser() orderCreator: User,
     @Param() { userId }: UserPathDto,
   ): Promise<Order> {
-    return this.orderService.createOrder(body, user, userId);
+    return this.orderService.createOrder(body, orderCreator, userId);
   }
 
   @ApiTags('Orders')

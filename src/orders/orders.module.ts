@@ -4,9 +4,16 @@ import { OrdersService } from './orders.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderRepository } from './repositories/Order.repository';
 import { ProductRepository } from '../products/repositories/Products.repository';
+import { BasketItemsRepository } from '../basket';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderRepository, ProductRepository])],
+  imports: [
+    TypeOrmModule.forFeature([
+      OrderRepository,
+      ProductRepository,
+      BasketItemsRepository,
+    ]),
+  ],
   controllers: [OrdersController],
   providers: [OrdersService],
 })
