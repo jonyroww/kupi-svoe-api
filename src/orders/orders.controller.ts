@@ -27,6 +27,7 @@ import { UserPathDto } from '../users/dto/UserPath.dto';
 import { MatchUserIdParamGuard } from '../common/guards/match-user-id-param.guard';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
+import { GetOneOrderParamDto } from './dto/get-one-order.dto';
 
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 @UseInterceptors(ClassSerializerInterceptor)
@@ -39,7 +40,7 @@ export class OrdersController {
   @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
   @ApiBearerAuth()
   @Post('users/:userId/orders')
-  createProduct(
+  createOrder(
     @Body() body: CreateOrderDto,
     @GetUser() orderCreator: User,
     @Param() { userId }: UserPathDto,
@@ -57,5 +58,14 @@ export class OrdersController {
     @Param() { userId }: UserPathDto,
   ): Promise<Paginated<Order>> {
     return this.orderService.getUserOrders(query, userId);
+  }
+
+  @ApiTags('Orders')
+  @ApiOkResponse({ type: () => Order })
+  @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
+  @ApiBearerAuth()
+  @Get('users/:userId/orders/:orderId')
+  getOneOrder(@Param() params: GetOneOrderParamDto): Promise<Order> {
+    return this.orderService.getOneOrder(params);
   }
 }

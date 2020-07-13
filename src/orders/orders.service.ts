@@ -7,6 +7,8 @@ import { BasketItem } from '../basket/entities/BasketItem.entity';
 import { Order } from './entities/Order.entity';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
 import { BasketItemsRepository } from '../basket';
+import { Paginated } from '../common/interfaces/paginated-entity.interface';
+import { GetOneOrderParamDto } from './dto/get-one-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -36,7 +38,10 @@ export class OrdersService {
     return order;
   }
 
-  async getUserOrders(query: GetOrdersDto, userId: number) {
+  async getUserOrders(
+    query: GetOrdersDto,
+    userId: number,
+  ): Promise<Paginated<Order>> {
     const [data, total] = await this.ordersRepo.findAndCount({
       where: { user_id: userId },
       relations: ['products'],
@@ -45,5 +50,13 @@ export class OrdersService {
       skip: query.offset,
     });
     return { total: total, data: data };
+  }
+
+  async getOneOrder(params: GetOneOrderParamDto) {
+    const order = await this.ordersRepo.findOneOrFailHttp({
+      where: { id: params.orderId, user_id: params.userId },
+      relations: ['products'],
+    });
+    return order;
   }
 }
