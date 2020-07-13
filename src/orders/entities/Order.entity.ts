@@ -41,26 +41,16 @@ export class Order {
   @DeleteDateColumn({ type: 'timestamp with time zone' })
   deleted_at: Date;
 
-  @ApiProperty({ type: 'string' })
-  @Column({ type: 'varchar' })
-  first_name: string;
-
-  @ApiProperty({ type: 'string' })
-  @Column({ type: 'varchar' })
-  last_name: string;
-
-  @ApiPropertyOptional({ type: 'string' })
-  @Column({ type: 'varchar', unique: true })
-  email: string;
-
-  @ApiProperty({ type: 'string' })
-  @Index()
-  @Column({ type: 'varchar', unique: true, nullable: false })
-  phone: string;
-
   @ApiProperty({ type: 'number', nullable: false })
   @Column({ type: 'int' })
   user_id: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'numeric',
+    nullable: false,
+  })
+  total_price: number;
 
   @ApiProperty()
   @Column({

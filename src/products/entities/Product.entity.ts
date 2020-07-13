@@ -59,7 +59,7 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'float',
+    type: 'numeric',
     nullable: false,
   })
   price: number;
