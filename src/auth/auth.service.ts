@@ -161,7 +161,12 @@ export class AuthService {
       verification_key,
       PurposeType.REGISTRATION,
     );
-    this.isUserNotUnique(body.email);
+    const isEmailNotUnique = await this.userRepository.findOne({
+      email: body.email,
+    });
+    if (isEmailNotUnique) {
+      throw makeError('EMAIL_ALREADY_EXISTS');
+    }
     body.password = await this.hashPassword(body.password);
     const user = this.userRepository.create(body);
     user.phone = phoneVerification.phone;
@@ -269,15 +274,6 @@ export class AuthService {
       }
     } else {
       throw makeError('USER_NOT_FOUND');
-    }
-  }
-
-  async isUserNotUnique(email: string) {
-    const isEmailNotUnique = await this.userRepository.findOne({
-      email: email,
-    });
-    if (isEmailNotUnique) {
-      throw makeError('EMAIL_ALREADY_EXISTS');
     }
   }
 

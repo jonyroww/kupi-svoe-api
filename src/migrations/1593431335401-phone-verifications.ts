@@ -22,13 +22,13 @@ export class phoneVerifications1593431335401 implements MigrationInterface {
 
           {
             name: 'created_at',
-            type: 'timestamp without time zone',
+            type: 'timestamptz',
             isNullable: false,
             default: 'NOW()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp without time zone',
+            type: 'timestamptz',
             isNullable: false,
             default: 'NOW()',
           },

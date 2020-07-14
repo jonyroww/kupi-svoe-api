@@ -31,19 +31,19 @@ export class users1593433505168 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamp without time zone',
+            type: 'timestamptz',
             isNullable: false,
             default: 'NOW()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp without time zone',
+            type: 'timestamptz',
             isNullable: false,
             default: 'NOW()',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp without time zone',
+            type: 'timestamptz',
             isNullable: true,
           },
           {

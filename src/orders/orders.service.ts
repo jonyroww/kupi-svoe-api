@@ -3,7 +3,6 @@ import { OrderRepository } from './repositories/Order.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { User } from '../users/entities/User.entity';
 import { ProductRepository } from '../products/repositories/Products.repository';
-import { BasketItem } from '../basket/entities/BasketItem.entity';
 import { Order } from './entities/Order.entity';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
 import { BasketItemsRepository } from '../basket';
