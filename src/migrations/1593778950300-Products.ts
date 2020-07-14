@@ -35,19 +35,19 @@ export class Products1593778950300 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamptz',
+            type: 'timestamp without time zone',
             isNullable: false,
             default: 'NOW()',
           },
           {
             name: 'updated_at',
-            type: 'timestamptz',
+            type: 'timestamp without time zone',
             isNullable: false,
             default: 'NOW()',
           },
           {
             name: 'deleted_at',
-            type: 'timestamptz',
+            type: 'timestamp without time zone',
             isNullable: true,
             default: null,
           },
