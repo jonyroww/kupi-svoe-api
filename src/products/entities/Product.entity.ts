@@ -7,10 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { User } from '../../users/entities/User.entity';
 import { Category } from '../../categories/entities/Category.entity';
+import { BasketItem } from '../../basket/entities/BasketItem.entity';
 
 @Entity({ name: 'products' })
 export class Product {
@@ -111,4 +113,10 @@ export class Product {
   @JoinColumn({ name: 'category_id' })
   @ApiProperty({ type: () => Category })
   category: Category;
+
+  @OneToMany(
+    () => BasketItem,
+    basketItem => basketItem.product,
+  )
+  basketItems: BasketItem[];
 }

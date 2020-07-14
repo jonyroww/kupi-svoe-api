@@ -29,7 +29,10 @@ export class BasketItem {
   product_id: number;
 
   @ApiPropertyOptional({ type: () => Product })
-  @ManyToOne(() => Product)
+  @ManyToOne(
+    () => Product,
+    product => product.basketItems,
+  )
   @JoinColumn({ name: 'product_id' })
   product: Product;
 
