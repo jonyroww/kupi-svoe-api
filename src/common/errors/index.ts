@@ -27,6 +27,7 @@ export const errors = {
   NOT_FOUND: HttpStatus.NOT_FOUND,
   PRODUCT_NOT_FOUND: HttpStatus.NOT_FOUND,
   OWN_PRODUCT: HttpStatus.BAD_REQUEST,
+  ORDER_NOT_FOUND: HttpStatus.NOT_FOUND,
 };
 
 export type ErrorCode = keyof typeof errors;

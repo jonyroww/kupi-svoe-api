@@ -120,7 +120,7 @@ export class User {
     () => Product,
     (product: Product) => product.user,
   )
-  product: Product[];
+  products: Product[];
 
   @ApiPropertyOptional({ type: () => Product })
   @ManyToMany(() => Product)

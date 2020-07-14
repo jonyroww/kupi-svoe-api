@@ -59,7 +59,7 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'numeric',
+    type: 'string',
     nullable: false,
   })
   price: number;
@@ -101,7 +101,7 @@ export class Product {
   @ApiProperty({ type: () => User })
   @ManyToOne(
     () => User,
-    (user: User) => user.product,
+    (user: User) => user.products,
   )
   @JoinColumn({ name: 'user_id' })
   user: User;
