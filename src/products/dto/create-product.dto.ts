@@ -11,7 +11,7 @@ export class CreateProductDto {
   @ApiProperty({ type: 'number' })
   @Transform(TransformInt)
   @IsNumber()
-  price: number;
+  price: string;
 
   @ApiProperty({ type: 'string' })
   @IsString()

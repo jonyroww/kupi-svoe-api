@@ -47,13 +47,6 @@ export class Order {
 
   @ApiProperty()
   @Column({
-    type: 'numeric',
-    nullable: false,
-  })
-  total_price: number;
-
-  @ApiProperty()
-  @Column({
     type: 'varchar',
     nullable: false,
   })

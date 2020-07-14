@@ -59,10 +59,10 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'string',
+    type: 'numeric',
     nullable: false,
   })
-  price: number;
+  price: string;
 
   @ApiProperty()
   @Column({
