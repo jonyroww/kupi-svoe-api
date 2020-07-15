@@ -62,7 +62,7 @@ export class Product {
     type: 'numeric',
     nullable: false,
   })
-  price: string;
+  price: string | number;
 
   @ApiProperty()
   @Column({

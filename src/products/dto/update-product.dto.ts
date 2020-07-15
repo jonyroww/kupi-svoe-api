@@ -19,7 +19,7 @@ export class UpdateProductDto {
   @IsOptional()
   @Transform(TransformInt)
   @IsNumber()
-  price: string;
+  price: number;
 
   @ApiProperty({ type: 'string' })
   @IsOptional()
