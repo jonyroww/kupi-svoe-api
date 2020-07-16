@@ -19,8 +19,6 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../common/decorators/get-user.decorator';
-import { User } from '../users/entities/User.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/Order.entity';
 import { UserPathDto } from '../users/dto/UserPath.dto';
