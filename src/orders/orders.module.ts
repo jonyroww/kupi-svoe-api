@@ -4,7 +4,7 @@ import { OrdersService } from './orders.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderRepository } from './repositories/Order.repository';
 import { ProductRepository } from '../products/repositories/Products.repository';
-import { BasketItemsRepository } from '../basket';
+import { BasketItemsRepository, BasketModule } from '../basket';
 
 @Module({
   imports: [
@@ -13,6 +13,7 @@ import { BasketItemsRepository } from '../basket';
       ProductRepository,
       BasketItemsRepository,
     ]),
+    BasketModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { OrderRepository } from './repositories/Order.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { User } from '../users/entities/User.entity';
-import { ProductRepository } from '../products/repositories/Products.repository';
 import { Order } from './entities/Order.entity';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
-import { BasketItemsRepository } from '../basket';
+import { BasketService } from '../basket';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
 import { GetOneOrderParamDto } from './dto/get-one-order.dto';
 
@@ -13,20 +11,13 @@ import { GetOneOrderParamDto } from './dto/get-one-order.dto';
 export class OrdersService {
   constructor(
     private ordersRepo: OrderRepository,
-    private productsRepo: ProductRepository,
-    private basketItemsRepo: BasketItemsRepository,
+    private basketService: BasketService,
   ) {}
 
   async createOrder(body: CreateOrderDto, userId: number): Promise<Order> {
     const order = this.ordersRepo.create(body);
     order.user_id = userId;
-    const basketItems = await this.basketItemsRepo.find({
-      where: { user_id: userId },
-    });
-    const productIds = basketItems.map(basketItem => basketItem.product_id);
-    const qb = this.productsRepo.createQueryBuilder('products');
-    qb.whereInIds(productIds);
-    order.products = await qb.getMany();
+    order.products = await this.basketService.getProductsInBasket(userId);
     await this.ordersRepo.save(order);
     return order;
   }
