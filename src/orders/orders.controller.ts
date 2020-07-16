@@ -42,10 +42,9 @@ export class OrdersController {
   @Post('users/:userId/orders')
   createOrder(
     @Body() body: CreateOrderDto,
-    @GetUser() orderCreator: User,
     @Param() { userId }: UserPathDto,
   ): Promise<Order> {
-    return this.orderService.createOrder(body, orderCreator, userId);
+    return this.orderService.createOrder(body, userId);
   }
 
   @ApiTags('Orders')

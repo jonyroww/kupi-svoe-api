@@ -17,15 +17,9 @@ export class OrdersService {
     private basketItemsRepo: BasketItemsRepository,
   ) {}
 
-  async createOrder(
-    body: CreateOrderDto,
-    orderCreator: User,
-    userId: number,
-  ): Promise<Order> {
-    const order = this.ordersRepo.create(orderCreator);
-    order.delivery_type = body.delivery_type;
-    order.payment_type = body.payment_type;
-    order.user_id = orderCreator.id;
+  async createOrder(body: CreateOrderDto, userId: number): Promise<Order> {
+    const order = this.ordersRepo.create(body);
+    order.user_id = userId;
     const basketItems = await this.basketItemsRepo.find({
       where: { user_id: userId },
     });
