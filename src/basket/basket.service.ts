@@ -43,9 +43,14 @@ export class BasketService {
   async getProductsInBasket(userId: number): Promise<Product[]> {
     return this.productsRepo
       .createQueryBuilder('products')
-      .innerJoin(BasketItem, 'basket_items', 'basket_items.user_id = :userId', {
-        userId,
-      })
+      .innerJoin(
+        'products.basketItems',
+        'basketItems',
+        'basketItems.user_id = :userId',
+        {
+          userId,
+        },
+      )
       .getMany();
   }
 

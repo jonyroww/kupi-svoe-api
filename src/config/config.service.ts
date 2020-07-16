@@ -35,6 +35,10 @@ export class ConfigService {
       SMS_CODE_GEN: Joi.boolean().required(),
       REDIRECT_URI_SUCCESS: Joi.string().required(),
       REDIRECT_URI_ERROR: Joi.string().required(),
+
+      DISABLE_AUTO_MIGRATION: Joi.boolean()
+        .optional()
+        .default(false),
     }).options({
       stripUnknown: true,
     });
@@ -63,4 +67,6 @@ export interface EnvironmentConfig {
   SMS_CODE_GEN: boolean;
   REDIRECT_URI_SUCCESS: string;
   REDIRECT_URI_ERROR: string;
+
+  DISABLE_AUTO_MIGRATION?: boolean;
 }

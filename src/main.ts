@@ -4,11 +4,19 @@ import { initializeTransactionalContext } from 'typeorm-transactional-cls-hooked
 import { Logger } from '@nestjs/common';
 import { ConfigService } from './config/config.service';
 import { setupSwagger } from './lib/setup-swagger';
+import { runMigrations } from './lib/run-migrations';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const logger = new Logger('bootstrap');
 
 async function bootstrap() {
   initializeTransactionalContext();
+
+  if (process.env.DISABLE_AUTO_MIGRATION !== 'true') {
+    await runMigrations();
+  }
 
   const app = await NestFactory.create(AppModule);
 
