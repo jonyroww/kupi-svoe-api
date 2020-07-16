@@ -3,7 +3,7 @@ import { OrderRepository } from './repositories/Order.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/Order.entity';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
-import { BasketService } from '../basket';
+import { BasketService, BasketItemsRepository } from '../basket';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
 import { GetOneOrderParamDto } from './dto/get-one-order.dto';
 
@@ -12,6 +12,7 @@ export class OrdersService {
   constructor(
     private ordersRepo: OrderRepository,
     private basketService: BasketService,
+    private basketItemsRepository: BasketItemsRepository,
   ) {}
 
   async createOrder(body: CreateOrderDto, userId: number): Promise<Order> {
@@ -19,6 +20,7 @@ export class OrdersService {
     order.user_id = userId;
     order.products = await this.basketService.getProductsInBasket(userId);
     await this.ordersRepo.save(order);
+    await this.basketItemsRepository.delete({ user_id: userId });
     return order;
   }
 
