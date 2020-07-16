@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PhoneVerificationRepository } from './repositories/Phone-verification.repository';
 import { PhoneVerificationRequestDto } from './dto/create-phone-verification.dto';
 import { PurposeType } from '../constants/PurposeType.enum';
@@ -161,7 +161,7 @@ export class AuthService {
       verification_key,
       PurposeType.REGISTRATION,
     );
-    this.isUserNotUnique(body.email);
+    await this.isUserNotUnique(phoneVerification.phone, body.email);
     body.password = await this.hashPassword(body.password);
     const user = this.userRepository.create(body);
     user.phone = phoneVerification.phone;
@@ -272,11 +272,16 @@ export class AuthService {
     }
   }
 
-  async isUserNotUnique(email: string) {
+  async isUserNotUnique(phone: string, email: string) {
+    const isPhoneNotUnique = await this.userRepository.findOne({
+      phone: phone,
+    });
     const isEmailNotUnique = await this.userRepository.findOne({
       email: email,
     });
-    if (isEmailNotUnique) {
+    if (isPhoneNotUnique) {
+      throw makeError('PHONE_ALREADY_EXISTS');
+    } else if (isEmailNotUnique) {
       throw makeError('EMAIL_ALREADY_EXISTS');
     }
   }
