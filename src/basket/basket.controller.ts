@@ -10,9 +10,9 @@ import {
   Param,
   Get,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { CreateBasketItemDto } from './dto/CreateBasketItem.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { MatchUserIdParamGuard } from '../common/guards/match-user-id-param.guard';
 import {
   ApiTags,
@@ -24,7 +24,9 @@ import { UserPathDto } from '../users/dto/UserPath.dto';
 import { BasketService } from './basket.service';
 import { BasketItem } from './entities/BasketItem.entity';
 import { Product } from '../products/entities/Product.entity';
-import { ProductInBasketPathDto } from './dto/ProductInBasketPath.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { BasketItemPathDto } from './dto/BasketItemPath.dto';
+import { UpdateBasketItemDto } from './dto/UpdateBasketItem.dto';
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
@@ -46,38 +48,49 @@ export class BasketController {
       Отличие от users/:userId/products-in-basket в том, что он возвращает
       список непосредственно объектов продуктов.`,
   })
-  @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
+  @UseGuards(JwtAuthGuard, MatchUserIdParamGuard)
   @ApiOkResponse({ type: () => BasketItem, isArray: true })
   getBasketItems(@Param() { userId }: UserPathDto): Promise<BasketItem[]> {
     return this.basketService.getBasketItems(userId);
   }
 
-  @Post('users/:userId/products-in-basket')
-  @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
+  @Post('users/:userId/basket-items')
+  @UseGuards(JwtAuthGuard, MatchUserIdParamGuard)
   @ApiCreatedResponse({ type: () => BasketItem })
   createBasketItem(
     @Param() { userId }: UserPathDto,
     @Body() createBasketItemDto: CreateBasketItemDto,
   ): Promise<BasketItem> {
-    return this.basketService.createBasketItem(
+    return this.basketService.createBasketItem(userId, createBasketItemDto);
+  }
+
+  @Put('users/:userId/basket-items/:basketItemId')
+  @UseGuards(JwtAuthGuard, MatchUserIdParamGuard)
+  @ApiOkResponse({ type: () => BasketItem })
+  updateBasketItem(
+    @Param() { userId, basketItemId }: BasketItemPathDto,
+    @Body() updateData: UpdateBasketItemDto,
+  ): Promise<BasketItem> {
+    return this.basketService.updateBasketItem(
       userId,
-      createBasketItemDto.product_id,
+      basketItemId,
+      updateData,
     );
   }
 
+  @Delete('users/:userId/basket-items/:basketItemId')
+  @UseGuards(JwtAuthGuard, MatchUserIdParamGuard)
+  @ApiOkResponse()
+  async deleteUsersBasketItem(
+    @Param() { userId, basketItemId }: BasketItemPathDto,
+  ): Promise<void> {
+    await this.basketService.deleteUsersBasketItem(userId, basketItemId);
+  }
+
   @Get('users/:userId/products-in-basket')
-  @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
+  @UseGuards(JwtAuthGuard, MatchUserIdParamGuard)
   @ApiOkResponse({ type: () => Product, isArray: true })
   getProductsInBasket(@Param() { userId }: UserPathDto): Promise<Product[]> {
     return this.basketService.getProductsInBasket(userId);
-  }
-
-  @Delete('users/:userId/products-in-basket/:productId')
-  @UseGuards(AuthGuard('jwt'), MatchUserIdParamGuard)
-  @ApiOkResponse({ type: () => Product, isArray: true })
-  async removeProductFromBasket(
-    @Param() { userId, productId }: ProductInBasketPathDto,
-  ): Promise<void> {
-    await this.basketService.deleteProductFromBasket(userId, productId);
   }
 }
