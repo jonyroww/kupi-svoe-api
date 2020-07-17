@@ -28,12 +28,19 @@ export class UpdateProductDto {
   @IsNumber()
   qnt: number;
 
+  @ApiProperty({ type: 'number' })
+  @IsOptional()
+  @Transform(TransformInt)
+  @IsNumber()
+  price_for_qnt: number;
+
   @ApiProperty({ type: 'string' })
   @IsOptional()
   @IsString()
   qnt_unit: string;
 
   @ApiProperty({ enum: DeliverySchedule })
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @IsEnum(DeliverySchedule)
