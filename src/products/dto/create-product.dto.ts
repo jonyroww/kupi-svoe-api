@@ -29,9 +29,7 @@ export class CreateProductDto {
   price_for_qnt: number;
 
   @ApiProperty({ enum: DeliverySchedule })
-  @IsArray()
-  @IsString({ each: true })
-  @IsEnum(DeliverySchedule)
+  @IsEnum(DeliverySchedule, { each: true })
   delivery_schedule: string[];
 
   @ApiProperty({ type: 'number' })

@@ -41,9 +41,7 @@ export class UpdateProductDto {
 
   @ApiProperty({ enum: DeliverySchedule })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  @IsEnum(DeliverySchedule)
+  @IsEnum(DeliverySchedule, { each: true })
   delivery_schedule: string[];
 
   @ApiProperty({ type: 'number' })
