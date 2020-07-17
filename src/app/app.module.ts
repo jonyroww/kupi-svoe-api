@@ -10,7 +10,7 @@ import { HandlebarsAdapter, MailerModule } from '@nest-modules/mailer';
 import { PhotosModule } from '../photos/photos.module';
 import { CategoriesModule } from '../categories/categories.module';
 import { ProductsModule } from '../products/products.module';
-import { BasketModule } from '../basket';
+import { BasketModule } from '../basket/basket.module';
 import { OrdersModule } from '../orders/orders.module';
 
 @Module({

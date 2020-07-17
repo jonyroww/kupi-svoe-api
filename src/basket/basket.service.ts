@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BasketItem } from './entities/BasketItem.entity';
-import { BasketItemsRepository } from './repositories/BaketItems.respository';
+import { BasketItemsRepository } from './repositories/BasketItems.repository';
 import { ProductRepository } from '../products/repositories/Products.repository';
 import { makeError } from '../common/errors';
 import { Product } from '../products/entities/Product.entity';

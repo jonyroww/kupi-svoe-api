@@ -3,9 +3,10 @@ import { OrderRepository } from './repositories/Order.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/Order.entity';
 import { GetOrdersDto } from './dto/get-all-user-orders.dto';
-import { BasketService, BasketItemsRepository } from '../basket';
+import { BasketService } from '../basket/basket.service';
 import { Paginated } from '../common/interfaces/paginated-entity.interface';
 import { GetOneOrderParamDto } from './dto/get-one-order.dto';
+import { BasketItemsRepository } from '../basket/repositories/BasketItems.repository';
 
 @Injectable()
 export class OrdersService {
