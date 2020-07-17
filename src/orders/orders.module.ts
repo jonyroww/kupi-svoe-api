@@ -4,7 +4,8 @@ import { OrdersService } from './orders.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderRepository } from './repositories/Order.repository';
 import { ProductRepository } from '../products/repositories/Products.repository';
-import { BasketItemsRepository, BasketModule } from '../basket';
+import { BasketModule } from '../basket/basket.module';
+import { BasketItemsRepository } from '../basket/repositories/BasketItems.repository';
 
 @Module({
   imports: [

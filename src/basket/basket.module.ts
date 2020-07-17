@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BasketController } from './basket.controller';
 import { BasketService } from './basket.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BasketItemsRepository } from './repositories/BaketItems.respository';
+import { BasketItemsRepository } from './repositories/BasketItems.repository';
 import { ProductRepository } from '../products/repositories/Products.repository';
 
 @Module({
