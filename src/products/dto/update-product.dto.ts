@@ -39,7 +39,7 @@ export class UpdateProductDto {
   @IsString()
   qnt_unit: string;
 
-  @ApiProperty({ enum: DeliverySchedule })
+  @ApiProperty({ enum: DeliverySchedule, isArray: true })
   @IsOptional()
   @IsEnum(DeliverySchedule, { each: true })
   delivery_schedule: string[];
