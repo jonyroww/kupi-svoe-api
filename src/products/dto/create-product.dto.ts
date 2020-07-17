@@ -1,7 +1,8 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString, IsArray, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { TransformInt } from '../../common/utils/transform-int.util';
+import { DeliverySchedule } from '../../constants/DeliverySchedule.enum';
 
 export class CreateProductDto {
   @ApiProperty({ type: 'string' })
@@ -22,9 +23,16 @@ export class CreateProductDto {
   @IsString()
   qnt_unit: string;
 
-  @ApiProperty({ type: 'string' })
-  @IsString()
-  delivery_schedule: string;
+  @ApiProperty({ type: 'number' })
+  @Transform(TransformInt)
+  @IsNumber()
+  price_for_qnt: number;
+
+  @ApiProperty({ enum: DeliverySchedule })
+  @IsArray()
+  @IsString({ each: true })
+  @IsEnum(DeliverySchedule)
+  delivery_schedule: string[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()

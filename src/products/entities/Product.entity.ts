@@ -64,14 +64,21 @@ export class Product {
     type: 'jsonb',
     nullable: false,
   })
-  delivery_schedule: string;
+  delivery_schedule: string[];
 
   @ApiProperty()
   @Column({
-    type: 'int',
+    type: 'float',
     nullable: false,
   })
   qnt: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'float',
+    nullable: false,
+  })
+  price_for_qnt: number;
 
   @ApiProperty()
   @Column({

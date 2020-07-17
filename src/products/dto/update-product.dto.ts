@@ -1,7 +1,14 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsOptional,
+  IsArray,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { TransformInt } from '../../common/utils/transform-int.util';
+import { DeliverySchedule } from '../../constants/DeliverySchedule.enum';
 
 export class UpdateProductDto {
   @ApiProperty({ type: 'string' })
@@ -26,10 +33,11 @@ export class UpdateProductDto {
   @IsString()
   qnt_unit: string;
 
-  @ApiProperty({ type: 'string' })
-  @IsOptional()
-  @IsString()
-  delivery_schedule: string;
+  @ApiProperty({ enum: DeliverySchedule })
+  @IsArray()
+  @IsString({ each: true })
+  @IsEnum(DeliverySchedule)
+  delivery_schedule: string[];
 
   @ApiProperty({ type: 'number' })
   @IsOptional()
