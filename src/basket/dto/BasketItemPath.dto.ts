@@ -1,9 +1,9 @@
-import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 import { TransformInt } from '../../common/utils/transform-int.util';
 import { IsInt } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
-export class ProductInBasketPathDto {
+export class BasketItemPathDto {
   @ApiProperty()
   @Transform(TransformInt)
   @IsInt()
@@ -12,5 +12,5 @@ export class ProductInBasketPathDto {
   @ApiProperty()
   @Transform(TransformInt)
   @IsInt()
-  productId: number;
+  basketItemId: number;
 }

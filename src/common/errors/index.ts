@@ -28,6 +28,7 @@ export const errors = {
   PRODUCT_NOT_FOUND: HttpStatus.NOT_FOUND,
   OWN_PRODUCT: HttpStatus.BAD_REQUEST,
   ORDER_NOT_FOUND: HttpStatus.NOT_FOUND,
+  SUCH_BASKET_ITEM_ALREADY_EXISTS: HttpStatus.CONFLICT,
 };
 
 export type ErrorCode = keyof typeof errors;
