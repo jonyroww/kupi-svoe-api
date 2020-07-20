@@ -54,13 +54,6 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'varchar',
-    nullable: false,
-  })
-  package_type: string;
-
-  @ApiProperty()
-  @Column({
     type: 'numeric',
     nullable: false,
   })
@@ -68,25 +61,31 @@ export class Product {
 
   @ApiProperty()
   @Column({
-    type: 'varchar',
+    type: 'jsonb',
     nullable: false,
   })
-  delivery_schedule: string;
+  delivery_schedule: string[];
+
+  @ApiProperty()
+  @Column({
+    type: 'float',
+    nullable: false,
+  })
+  qnt: number;
+
+  @ApiProperty()
+  @Column({
+    type: 'float',
+    nullable: false,
+  })
+  price_for_qnt: number;
 
   @ApiProperty()
   @Column({
     type: 'varchar',
-    nullable: true,
+    nullable: false,
   })
-  storage_period: string;
-
-  /**
-   * Дата сборки урожая
-   *
-   */
-  @ApiPropertyOptional({ type: 'string', description: 'Дата сборки урожая' })
-  @Column({ type: 'date' })
-  collection_date: Date;
+  qnt_unit: string;
 
   @ApiProperty({ type: 'number' })
   @Column({ type: 'int' })
@@ -95,10 +94,6 @@ export class Product {
   @ApiProperty({ type: 'int' })
   @Column({ type: 'int' })
   category_id: number;
-
-  @ApiPropertyOptional()
-  @Column({ type: 'text' })
-  description: string;
 
   @ApiProperty({ type: () => User })
   @ManyToOne(
@@ -122,11 +117,10 @@ export class Product {
     order => order.products,
   )
   orders: Product[];
-  
+
   @OneToMany(
     () => BasketItem,
     basketItem => basketItem.product,
   )
   basketItems: BasketItem[];
-
 }

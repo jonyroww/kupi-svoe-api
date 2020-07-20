@@ -1,7 +1,8 @@
-import { IsNumber, IsString, IsDate } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform, Type } from 'class-transformer';
+import { IsNumber, IsString, IsArray, IsEnum } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { TransformInt } from '../../common/utils/transform-int.util';
+import { DeliverySchedule } from '../../constants/DeliverySchedule.enum';
 
 export class CreateProductDto {
   @ApiProperty({ type: 'string' })
@@ -13,29 +14,26 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
 
-  @ApiProperty({ type: 'string' })
-  @IsString()
-  package_type: string;
+  @ApiProperty({ type: 'number' })
+  @Transform(TransformInt)
+  @IsNumber()
+  qnt: number;
 
   @ApiProperty({ type: 'string' })
   @IsString()
-  delivery_schedule: string;
+  qnt_unit: string;
 
-  @ApiPropertyOptional({ type: 'string' })
-  @IsString()
-  storage_period: string;
+  @ApiProperty({ type: 'number' })
+  @Transform(TransformInt)
+  @IsNumber()
+  price_for_qnt: number;
 
-  @ApiPropertyOptional({ type: 'string' })
-  @Type(() => Date)
-  @IsDate()
-  collection_date: Date;
+  @ApiProperty({ enum: DeliverySchedule, isArray: true })
+  @IsEnum(DeliverySchedule, { each: true })
+  delivery_schedule: string[];
 
   @ApiProperty({ type: 'number' })
   @IsNumber()
   @Transform(TransformInt)
   category_id: number;
-
-  @ApiPropertyOptional({ type: 'string' })
-  @IsString()
-  description: string;
 }
