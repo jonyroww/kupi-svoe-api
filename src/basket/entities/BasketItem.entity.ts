@@ -20,6 +20,14 @@ export class BasketItem {
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
+  /**
+   * Количество продукта, которое добавили в корзину.
+   * Единица измерения количества берется у продукта (product.qnt_unit).
+   */
+  @ApiProperty()
+  @Column({ type: 'float', nullable: false })
+  qnt: number;
+
   @ApiProperty()
   @Column({ type: 'integer', nullable: false })
   user_id: number;
